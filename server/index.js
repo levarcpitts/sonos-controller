@@ -7,6 +7,7 @@ const app = express();
 const discovery = new SonosDiscovery();
 
 app.use(cors());
+app.use(express.json())
 
 app.get('/devices', (req, res) => {
   const devices = Object.values(discovery.players).map(player => ({
@@ -45,6 +46,27 @@ app.post('/control/:uuid/:action', (req, res) => {
     }
   
     res.send('OK');
+  });
+
+  app.post('/volume/:uuid', (req, res) => {
+    const { uuid } = req.params;
+    const { volume } = req.body;
+    const player = discovery.getPlayerByUUID(uuid);
+  
+    console.log(`Received volume request: uuid=${uuid}, volume=${volume}`); // Log request
+  
+    if (!player) {
+      console.error('Player not found');
+      return res.status(404).send('Player not found');
+    }
+  
+    try {
+      player.setVolume(volume);
+      res.send('OK');
+    } catch (error) {
+      console.error('Error setting volume:', error);
+      res.status(500).send('Error setting volume');
+    }
   });
   
 const PORT = 5000;

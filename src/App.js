@@ -36,6 +36,23 @@ function App() {
       });
   };
 
+  const handleVolumeChange = (uuid, volume) => {
+    fetch(`http://localhost:5000/volume/${uuid}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ volume: parseInt(volume) })
+    })
+      .then(response => {
+        if (!response.ok) {
+          return response.text().then(text => { throw new Error(text) });
+        }
+      })
+      .catch(error => {
+        console.error('Error setting volume:', error);
+        alert(`Error setting volume: ${error.message}`);
+      });
+  };
+
   return (
     <div>
       <h1>Sonos Devices</h1>
@@ -44,7 +61,14 @@ function App() {
         {devices.map((device, index) => (
           <li key={index}>
             <p>{device.roomName}</p>
-            <p>{device.volume}</p>
+            <p>Volume: {device.volume}</p> {/* Display volume */}
+            <input
+              type="range"
+              min="0"
+              max="100"
+              value={device.volume}
+              onChange={(e) => handleVolumeChange(device.uuid, e.target.value)}
+            />
             <div>
               <button onClick={() => handleControl(device.uuid, 'play')}>Play</button>
               <button onClick={() => handleControl(device.uuid, 'pause')}>Pause</button>
