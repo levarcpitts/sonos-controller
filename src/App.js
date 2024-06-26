@@ -24,6 +24,18 @@ function App() {
     ));
   };
 
+  const handleControl = (uuid, action) => {
+    fetch(`http://localhost:5000/control/${uuid}/${action}`, { method: 'POST' })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Failed to perform action');
+        }
+      })
+      .catch(error => {
+        console.error('Error performing action:', error);
+      });
+  };
+
   return (
     <div>
       <h1>Sonos Devices</h1>
@@ -32,6 +44,13 @@ function App() {
         {devices.map((device, index) => (
           <li key={index}>
             <p>{device.roomName}</p>
+            <p>{device.volume}</p>
+            <div>
+              <button onClick={() => handleControl(device.uuid, 'play')}>Play</button>
+              <button onClick={() => handleControl(device.uuid, 'pause')}>Pause</button>
+              <button onClick={() => handleControl(device.uuid, 'previous')}>Previous</button>
+              <button onClick={() => handleControl(device.uuid, 'next')}>Next</button>
+            </div>
           </li>
         ))}
       </ul>
