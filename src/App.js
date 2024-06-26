@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 
 function App() {
@@ -18,12 +17,6 @@ function App() {
       });
   }, []);
 
-  const renderDeviceState = (state) => {
-    return Object.entries(state).map(([key, value]) => (
-      <p key={key}>{key}: {typeof value === 'object' ? JSON.stringify(value) : value}</p>
-    ));
-  };
-
   const handleControl = (uuid, action) => {
     fetch(`http://localhost:5000/control/${uuid}/${action}`, { method: 'POST' })
       .then(response => {
@@ -37,6 +30,12 @@ function App() {
   };
 
   const handleVolumeChange = (uuid, volume) => {
+    setDevices((prevDevices) => 
+      prevDevices.map((device) => 
+        device.uuid === uuid ? { ...device, volume: parseInt(volume) } : device
+      )
+    );
+
     fetch(`http://localhost:5000/volume/${uuid}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
