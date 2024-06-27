@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import PlaybackControls from './PlaybackControls';
 
 function App() {
   const [devices, setDevices] = useState([]);
   const [error, setError] = useState(null);
+  const [currentGroup, setCurrentGroup] = useState(null); // Track the current group
 
   useEffect(() => {
     fetch('http://localhost:5000/devices')
@@ -10,6 +12,7 @@ function App() {
       .then(data => {
         console.log('Fetched data:', data);
         setDevices(data);
+        setCurrentGroup(data.find(device => device.state.playbackState === 'PLAYING')?.group || data[0]?.group); // Set initial group
       })
       .catch(error => {
         console.error('Error fetching devices:', error);
@@ -17,15 +20,22 @@ function App() {
       });
   }, []);
 
-  const handleControl = (uuid, action) => {
-    fetch(`http://localhost:5000/control/${uuid}/${action}`, { method: 'POST' })
+  const renderDeviceState = (state) => {
+    return Object.entries(state).map(([key, value]) => (
+      <p key={key}>{key}: {typeof value === 'object' ? JSON.stringify(value) : value}</p>
+    ));
+  };
+
+  const handleControl = (group, action) => {
+    fetch(`http://localhost:5000/control/${group}/${action}`, { method: 'POST' })
       .then(response => {
         if (!response.ok) {
-          throw new Error('Failed to perform action');
+          return response.text().then(text => { throw new Error(text) });
         }
       })
       .catch(error => {
         console.error('Error performing action:', error);
+        alert(`Error performing action: ${error.message}`);
       });
   };
 
@@ -58,9 +68,10 @@ function App() {
       {error && <p>Error: {error.message}</p>}
       <ul>
         {devices.map((device, index) => (
-          <li key={index}>
-            <p>{device.roomName}</p>
-            <p>Volume: {device.volume}</p> {/* Display volume */}
+          <li key={index} onClick={() => setCurrentGroup(device.group)} style={{ cursor: 'pointer', background: device.group === currentGroup ? 'lightgray' : 'white' }}>
+            <p>Room: {device.roomName}</p>
+            <p>Coordinator: {device.coordinator ? 'Yes' : 'No'}</p>
+            <p>Volume: {device.volume}</p>
             <input
               type="range"
               min="0"
@@ -68,15 +79,10 @@ function App() {
               value={device.volume}
               onChange={(e) => handleVolumeChange(device.uuid, e.target.value)}
             />
-            <div>
-              <button onClick={() => handleControl(device.uuid, 'play')}>Play</button>
-              <button onClick={() => handleControl(device.uuid, 'pause')}>Pause</button>
-              <button onClick={() => handleControl(device.uuid, 'previous')}>Previous</button>
-              <button onClick={() => handleControl(device.uuid, 'next')}>Next</button>
-            </div>
           </li>
         ))}
       </ul>
+      {currentGroup && <PlaybackControls uuid={currentGroup} handleControl={handleControl} />}
     </div>
   );
 }
