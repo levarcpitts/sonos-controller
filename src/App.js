@@ -7,7 +7,7 @@ function App() {
   const [currentGroup, setCurrentGroup] = useState(null); // Track the current group
   const [groupVolume, setGroupVolume] = useState(50); // Track the group volume
 
-  useEffect(() => {
+  const fetchDevices = () => {
     fetch('http://localhost:5000/devices')
       .then(response => response.json())
       .then(data => {
@@ -24,13 +24,13 @@ function App() {
         console.error('Error fetching devices:', error);
         setError(error);
       });
-  }, []);
-
-  const renderDeviceState = (state) => {
-    return Object.entries(state).map(([key, value]) => (
-      <p key={key}>{key}: {typeof value === 'object' ? JSON.stringify(value) : value}</p>
-    ));
   };
+
+  useEffect(() => {
+    fetchDevices();
+    const interval = setInterval(fetchDevices, 5000); // Poll every 5 seconds
+    return () => clearInterval(interval); // Clean up on unmount
+  }, []);
 
   const handleControl = (group, action) => {
     fetch(`http://localhost:5000/control/${group}/${action}`, { method: 'POST' })
@@ -74,6 +74,8 @@ function App() {
     setGroupVolume(volume);
   };
 
+  const nowPlaying = devices.find(device => device.group === currentGroup)?.nowPlaying;
+
   return (
     <div>
       <h1>Sonos Devices</h1>
@@ -100,6 +102,7 @@ function App() {
           handleControl={handleControl}
           handleVolumeChange={handleGroupVolumeChange}
           initialVolume={groupVolume}
+          nowPlaying={nowPlaying}
         />
       )}
     </div>

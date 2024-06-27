@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-function PlaybackControls({ uuid, handleControl, handleVolumeChange, initialVolume }) {
+function PlaybackControls({ uuid, handleControl, handleVolumeChange, initialVolume, nowPlaying }) {
   const [volume, setVolume] = useState(initialVolume);
 
   useEffect(() => {
@@ -15,6 +15,19 @@ function PlaybackControls({ uuid, handleControl, handleVolumeChange, initialVolu
 
   return (
     <div>
+         <div>
+        <h3>Now Playing</h3>
+        {nowPlaying ? (
+          <div>
+            <img src={nowPlaying.albumArtUri} alt="Album cover" style={{ width: '100px', height: '100px' }} />
+            <p>Track: {nowPlaying.title}</p>
+            <p>Artist: {nowPlaying.artist}</p>
+            <p>Album: {nowPlaying.album}</p>
+          </div>
+        ) : (
+          <p>No track playing</p>
+        )}
+      </div>
       <button onClick={() => handleControl(uuid, 'play')}>Play</button>
       <button onClick={() => handleControl(uuid, 'pause')}>Pause</button>
       <button onClick={() => handleControl(uuid, 'previous')}>Previous</button>

@@ -15,7 +15,8 @@ app.get('/devices', (req, res) => {
     state: player.state,
     uuid: player.uuid,
     volume: player.state.volume,
-    group: player.coordinator.uuid 
+    group: player.coordinator.uuid,
+    nowPlaying: player.state.currentTrack
   }));
   res.json(devices);
 });
