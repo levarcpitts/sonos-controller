@@ -5,6 +5,7 @@ function App() {
   const [devices, setDevices] = useState([]);
   const [error, setError] = useState(null);
   const [currentGroup, setCurrentGroup] = useState(null); // Track the current group
+  const [groupVolume, setGroupVolume] = useState(50); // Track the group volume
 
   useEffect(() => {
     fetch('http://localhost:5000/devices')
@@ -12,7 +13,12 @@ function App() {
       .then(data => {
         console.log('Fetched data:', data);
         setDevices(data);
-        setCurrentGroup(data.find(device => device.state.playbackState === 'PLAYING')?.group || data[0]?.group); // Set initial group
+        const initialGroup = data.find(device => device.state.playbackState === 'PLAYING')?.group || data[0]?.group;
+        setCurrentGroup(initialGroup);
+        const groupDevices = data.filter(device => device.group === initialGroup);
+        if (groupDevices.length > 0) {
+          setGroupVolume(groupDevices[0].volume);
+        }
       })
       .catch(error => {
         console.error('Error fetching devices:', error);
@@ -62,6 +68,12 @@ function App() {
       });
   };
 
+  const handleGroupVolumeChange = (group, volume) => {
+    const groupDevices = devices.filter(device => device.group === group);
+    groupDevices.forEach(device => handleVolumeChange(device.uuid, volume));
+    setGroupVolume(volume);
+  };
+
   return (
     <div>
       <h1>Sonos Devices</h1>
@@ -82,7 +94,14 @@ function App() {
           </li>
         ))}
       </ul>
-      {currentGroup && <PlaybackControls uuid={currentGroup} handleControl={handleControl} />}
+      {currentGroup && (
+        <PlaybackControls
+          uuid={currentGroup}
+          handleControl={handleControl}
+          handleVolumeChange={handleGroupVolumeChange}
+          initialVolume={groupVolume}
+        />
+      )}
     </div>
   );
 }
