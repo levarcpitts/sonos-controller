@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from 'react';
+import PlayArrowIcon from '@material-ui/icons/PlayArrow';
+import FastForwardIcon from '@material-ui/icons/FastForward';
+import PauseIcon from '@material-ui/icons/Pause';
+import FastRewindIcon from '@material-ui/icons/FastRewind';
+import IconButton from '@mui/material/IconButton';
 
 function PlaybackControls({ uuid, handleControl, handleVolumeChange, initialVolume, nowPlaying }) {
   const [volume, setVolume] = useState(initialVolume);
+  const [isPlaying, setIsPlaying] = useState(false);
 
   useEffect(() => {
     setVolume(initialVolume);
@@ -11,6 +17,15 @@ function PlaybackControls({ uuid, handleControl, handleVolumeChange, initialVolu
     const newVolume = e.target.value;
     setVolume(newVolume);
     handleVolumeChange(uuid, newVolume);
+  };
+
+  const togglePlayPause = () => {
+    if (isPlaying) {
+      handleControl(uuid, 'pause');
+    } else {
+      handleControl(uuid, 'play');
+    }
+    setIsPlaying(!isPlaying);
   };
 
   return (
@@ -28,10 +43,11 @@ function PlaybackControls({ uuid, handleControl, handleVolumeChange, initialVolu
           <p>No track playing</p>
         )}
       </div>
-      <button onClick={() => handleControl(uuid, 'play')}>Play</button>
-      <button onClick={() => handleControl(uuid, 'pause')}>Pause</button>
-      <button onClick={() => handleControl(uuid, 'previous')}>Previous</button>
-      <button onClick={() => handleControl(uuid, 'next')}>Next</button>
+      <FastRewindIcon onClick={() => handleControl(uuid, 'previous')}>Previous</FastRewindIcon>
+      <button onClick={togglePlayPause}>
+        {isPlaying ? <PauseIcon /> : <PlayArrowIcon />}
+        </button>
+      <FastForwardIcon onClick={() => handleControl(uuid, 'next')}>Next</FastForwardIcon>
       <div>
         <input
           type="range"
