@@ -1,0 +1,61 @@
+.group-volume-controls {
+    background-color: #ccc;
+    padding: 20px;
+    border-radius: 10px;
+    width: 300px;
+    margin: auto;
+    font-family: Arial, sans-serif;
+  }
+  
+  .header {
+    text-align: center;
+    color: white;
+    background-color: #555;
+    padding: 10px;
+    border-radius: 10px 10px 0 0;
+  }
+  
+  ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .device {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    background-color: #eee;
+    border-radius: 5px;
+    margin: 5px 0;
+    cursor: pointer;
+  }
+  
+  .device.active {
+    background-color: #aaa;
+  }
+  
+  .device-info {
+    display: flex;
+    align-items: center;
+  }
+  
+  .room-name {
+    margin-left: 10px;
+  }
+  
+  .volume-control {
+    display: flex;
+    align-items: center;
+    width: 150px;
+  }
+  
+  .volume-control .MuiSlider-root {
+    margin: 0 10px;
+  }
+  
+  .device:hover {
+    background-color: #ddd;
+  }
+  
