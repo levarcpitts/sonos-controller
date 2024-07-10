@@ -81,26 +81,19 @@ function App() {
       <div>
         <h1>Sonos Devices</h1>
         {error && <p>Error: {error.message}</p>}
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
-          {currentGroup && (
-            <PlaybackControls
-              uuid={currentGroup}
-              handleControl={handleControl}
-              handleVolumeChange={handleGroupVolumeChange}
-              initialVolume={groupVolume}
-              nowPlaying={nowPlaying}
-              toggleGroupVolumeControls={() => setIsGroupVolumeControlsVisible(prev => !prev)}
-            />
-          )}
-          {isGroupVolumeControlsVisible && (
-            <GroupVolumeControls
-              devices={devices}
-              currentGroup={currentGroup}
-              setCurrentGroup={setCurrentGroup}
-              handleVolumeChange={handleVolumeChange}
-            />
-          )}
-        </div>
+        <PlaybackControls
+          uuid={currentGroup}
+          handleControl={handleControl}
+          handleVolumeChange={handleGroupVolumeChange}
+          initialVolume={groupVolume}
+          nowPlaying={nowPlaying}
+          toggleGroupVolumeControls={() => setIsGroupVolumeControlsVisible(prev => !prev)}
+          isGroupVolumeControlsVisible={isGroupVolumeControlsVisible}
+          devices={devices}
+          currentGroup={currentGroup}
+          setCurrentGroup={setCurrentGroup}
+          handleDeviceVolumeChange={handleVolumeChange}
+        />
       </div>
     </ThemeProvider>
   );

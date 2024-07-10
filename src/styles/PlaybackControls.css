@@ -62,6 +62,7 @@
   align-items: center;
   flex: 1;
   justify-content: center;
+  position: relative; /* Add relative positioning */
 }
 
 .volume-control .MuiSlider-root {
@@ -84,4 +85,11 @@
 .volume-control .MuiSlider-rail {
   opacity: 0.5;
   background-color: #bfbfbf;
+}
+
+.group-volume-controls-wrapper {
+  position: absolute;
+  bottom: 50px; /* Adjust this value to place the component above the PlaybackControls */
+  right: 0;
+  z-index: 1000;
 }

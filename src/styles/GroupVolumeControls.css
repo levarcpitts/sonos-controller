@@ -4,8 +4,6 @@
     width: 300px;
     margin: auto;
     font-family: Arial, sans-serif;
-    bottom: 0;
-    left: 50;
   }
   
   .header {
@@ -20,6 +18,7 @@
   ul {
     list-style-type: none;
     padding: 0;
+    color: black
   }
   
   li {

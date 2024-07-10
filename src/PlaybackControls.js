@@ -6,9 +6,22 @@ import FastRewindIcon from '@mui/icons-material/FastRewind';
 import IconButton from '@mui/material/IconButton';
 import Slider from '@mui/material/Slider';
 import SpeakerGroupIcon from '@mui/icons-material/SpeakerGroup';
+import GroupVolumeControls from './GroupVolumeControls';
 import './styles/PlaybackControls.css';
 
-function PlaybackControls({ uuid, handleControl, handleVolumeChange, initialVolume, nowPlaying, toggleGroupVolumeControls }) {
+function PlaybackControls({ 
+  uuid, 
+  handleControl, 
+  handleVolumeChange, 
+  initialVolume, 
+  nowPlaying, 
+  toggleGroupVolumeControls, 
+  isGroupVolumeControlsVisible, 
+  devices, 
+  currentGroup, 
+  setCurrentGroup, 
+  handleDeviceVolumeChange 
+}) {
   const [volume, setVolume] = useState(initialVolume);
   const [isPlaying, setIsPlaying] = useState(false);
 
@@ -59,9 +72,21 @@ function PlaybackControls({ uuid, handleControl, handleVolumeChange, initialVolu
       <div className="volume-control">
         <Slider value={volume} onChange={handleVolumeSliderChange} aria-labelledby="continuous-slider" />
         <SpeakerGroupIcon onClick={toggleGroupVolumeControls} style={{ cursor: 'pointer' }} />
+        {isGroupVolumeControlsVisible && (
+          <div className="group-volume-controls-wrapper">
+            <GroupVolumeControls
+              devices={devices}
+              currentGroup={currentGroup}
+              setCurrentGroup={setCurrentGroup}
+              handleVolumeChange={handleDeviceVolumeChange}
+            />
+          </div>
+        )}
       </div>
     </div>
   );
 }
 
 export default PlaybackControls;
+
+
