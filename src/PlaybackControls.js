@@ -5,6 +5,7 @@ import PauseIcon from '@mui/icons-material/Pause';
 import FastRewindIcon from '@mui/icons-material/FastRewind';
 import IconButton from '@mui/material/IconButton';
 import Slider from '@mui/material/Slider';
+import SpeakerGroupIcon from '@mui/icons-material/SpeakerGroup';
 import './styles/PlaybackControls.css';
 
 function PlaybackControls({ uuid, handleControl, handleVolumeChange, initialVolume, nowPlaying }) {
@@ -57,6 +58,7 @@ function PlaybackControls({ uuid, handleControl, handleVolumeChange, initialVolu
       </div>
       <div className="volume-control">
         <Slider value={volume} onChange={handleVolumeSliderChange} aria-labelledby="continuous-slider" />
+        <SpeakerGroupIcon />
       </div>
     </div>
   );
