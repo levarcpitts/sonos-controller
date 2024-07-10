@@ -1,6 +1,5 @@
 .group-volume-controls {
-    background-color: #ccc;
-    padding: 20px;
+    background-color: #ccc; /* Light grey background for the entire component */
     border-radius: 10px;
     width: 300px;
     margin: auto;
@@ -20,20 +19,23 @@
     padding: 0;
   }
   
+  li {
+    margin-bottom: 10px;
+  }
+  
   .device {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
-    background-color: #eee;
+    padding: 10px; /* Adjust padding for better spacing */
+    background-color: #ccc; /* Light grey background for each device */
     border-radius: 5px;
     margin: 5px 0;
     cursor: pointer;
   }
   
   .device.active {
-    background-color: #aaa;
+    background-color: #ccc; /* Darker grey for active device */
   }
   
   .device-info {
@@ -48,7 +50,7 @@
   .volume-control {
     display: flex;
     align-items: center;
-    width: 150px;
+    width: 290px; /* Adjust width for better alignment */
   }
   
   .volume-control .MuiSlider-root {
@@ -56,6 +58,6 @@
   }
   
   .device:hover {
-    background-color: #ddd;
+    background-color: #ddd; /* Hover effect for devices */
   }
   

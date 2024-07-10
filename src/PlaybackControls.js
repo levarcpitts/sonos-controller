@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import PlayArrowIcon from '@material-ui/icons/PlayArrow';
-import FastForwardIcon from '@material-ui/icons/FastForward';
-import PauseIcon from '@material-ui/icons/Pause';
-import FastRewindIcon from '@material-ui/icons/FastRewind';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import FastForwardIcon from '@mui/icons-material/FastForward';
+import PauseIcon from '@mui/icons-material/Pause';
+import FastRewindIcon from '@mui/icons-material/FastRewind';
 import IconButton from '@mui/material/IconButton';
+import Slider from '@mui/material/Slider';
+import './styles/PlaybackControls.css';
 
 function PlaybackControls({ uuid, handleControl, handleVolumeChange, initialVolume, nowPlaying }) {
   const [volume, setVolume] = useState(initialVolume);
@@ -13,8 +15,7 @@ function PlaybackControls({ uuid, handleControl, handleVolumeChange, initialVolu
     setVolume(initialVolume);
   }, [initialVolume]);
 
-  const handleVolumeSliderChange = (e) => {
-    const newVolume = e.target.value;
+  const handleVolumeSliderChange = (e, newVolume) => {
     setVolume(newVolume);
     handleVolumeChange(uuid, newVolume);
   };
@@ -29,34 +30,33 @@ function PlaybackControls({ uuid, handleControl, handleVolumeChange, initialVolu
   };
 
   return (
-    <div>
-         <div>
-        <h3>Now Playing</h3>
+    <div className="playback-controls">
+      <div className="now-playing-info">
         {nowPlaying ? (
-          <div>
-            <img src={nowPlaying.albumArtUri} alt="Album cover" style={{ width: '100px', height: '100px' }} />
-            <p>Track: {nowPlaying.title}</p>
-            <p>Artist: {nowPlaying.artist}</p>
-            <p>Album: {nowPlaying.album}</p>
+          <div className="track-info">
+            <img src={nowPlaying.albumArtUri} alt="Album cover" className="album-art" />
+            <div className="track-details">
+              <p className="track-title">{nowPlaying.title}</p>
+              <p className="track-artist">{nowPlaying.artist}</p>
+            </div>
           </div>
         ) : (
-          <p>No track playing</p>
+          <p className="no-track">No track playing</p>
         )}
       </div>
-      <FastRewindIcon onClick={() => handleControl(uuid, 'previous')}>Previous</FastRewindIcon>
-      <button onClick={togglePlayPause}>
-        {isPlaying ? <PauseIcon /> : <PlayArrowIcon />}
-        </button>
-      <FastForwardIcon onClick={() => handleControl(uuid, 'next')}>Next</FastForwardIcon>
-      <div>
-        <input
-          type="range"
-          min="0"
-          max="100"
-          value={volume}
-          onChange={handleVolumeSliderChange}
-        />
-        <p>Volume: {volume}</p>
+      <div className="control-buttons">
+        <IconButton onClick={() => handleControl(uuid, 'previous')}>
+          <FastRewindIcon />
+        </IconButton>
+        <IconButton onClick={togglePlayPause}>
+          {isPlaying ? <PauseIcon /> : <PlayArrowIcon />}
+        </IconButton>
+        <IconButton onClick={() => handleControl(uuid, 'next')}>
+          <FastForwardIcon />
+        </IconButton>
+      </div>
+      <div className="volume-control">
+        <Slider value={volume} onChange={handleVolumeSliderChange} aria-labelledby="continuous-slider" />
       </div>
     </div>
   );

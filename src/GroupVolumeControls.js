@@ -22,7 +22,6 @@ function GroupVolumeControls({ devices, currentGroup, setCurrentGroup, handleVol
         </div>
         <div className="volume-control">
         <VolumeDown />
-        <p>Volume: {device.state.volume}</p>
         <Slider
                 value={device.state.volume}
                 onChange={(e, value) => handleVolumeChange(device.uuid, value)}
