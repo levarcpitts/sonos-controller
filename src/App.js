@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 import PlaybackControls from './PlaybackControls';
 import GroupVolumeControls from './GroupVolumeControls';
 
@@ -7,6 +8,7 @@ function App() {
   const [error, setError] = useState(null);
   const [currentGroup, setCurrentGroup] = useState(null); // Track the current group
   const [groupVolume, setGroupVolume] = useState(50); // Track the group volume
+  const [isGroupVolumeControlsVisible, setIsGroupVolumeControlsVisible] = useState(false); // State to manage visibility
 
   const dummyDevices = [
     {
@@ -72,26 +74,35 @@ function App() {
 
   const nowPlaying = devices.find(device => device.group === currentGroup)?.state.currentTrack;
 
+  const theme = createTheme();
+
   return (
-    <div>
-      <h1>Sonos Devices</h1>
-      {error && <p>Error: {error.message}</p>}
-      <GroupVolumeControls
-        devices={devices}
-        currentGroup={currentGroup}
-        setCurrentGroup={setCurrentGroup}
-        handleVolumeChange={handleVolumeChange}
-      />
-      {currentGroup && (
-        <PlaybackControls
-          uuid={currentGroup}
-          handleControl={handleControl}
-          handleVolumeChange={handleGroupVolumeChange}
-          initialVolume={groupVolume}
-          nowPlaying={nowPlaying}
-        />
-      )}
-    </div>
+    <ThemeProvider theme={theme}>
+      <div>
+        <h1>Sonos Devices</h1>
+        {error && <p>Error: {error.message}</p>}
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
+          {currentGroup && (
+            <PlaybackControls
+              uuid={currentGroup}
+              handleControl={handleControl}
+              handleVolumeChange={handleGroupVolumeChange}
+              initialVolume={groupVolume}
+              nowPlaying={nowPlaying}
+              toggleGroupVolumeControls={() => setIsGroupVolumeControlsVisible(prev => !prev)}
+            />
+          )}
+          {isGroupVolumeControlsVisible && (
+            <GroupVolumeControls
+              devices={devices}
+              currentGroup={currentGroup}
+              setCurrentGroup={setCurrentGroup}
+              handleVolumeChange={handleVolumeChange}
+            />
+          )}
+        </div>
+      </div>
+    </ThemeProvider>
   );
 }
 

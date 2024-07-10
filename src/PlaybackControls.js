@@ -8,7 +8,7 @@ import Slider from '@mui/material/Slider';
 import SpeakerGroupIcon from '@mui/icons-material/SpeakerGroup';
 import './styles/PlaybackControls.css';
 
-function PlaybackControls({ uuid, handleControl, handleVolumeChange, initialVolume, nowPlaying }) {
+function PlaybackControls({ uuid, handleControl, handleVolumeChange, initialVolume, nowPlaying, toggleGroupVolumeControls }) {
   const [volume, setVolume] = useState(initialVolume);
   const [isPlaying, setIsPlaying] = useState(false);
 
@@ -58,7 +58,7 @@ function PlaybackControls({ uuid, handleControl, handleVolumeChange, initialVolu
       </div>
       <div className="volume-control">
         <Slider value={volume} onChange={handleVolumeSliderChange} aria-labelledby="continuous-slider" />
-        <SpeakerGroupIcon />
+        <SpeakerGroupIcon onClick={toggleGroupVolumeControls} style={{ cursor: 'pointer' }} />
       </div>
     </div>
   );

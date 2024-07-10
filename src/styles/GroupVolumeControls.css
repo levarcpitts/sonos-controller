@@ -48,6 +48,7 @@
   
   .room-name {
     margin-left: 10px;
+    font-weight: bold; /* Make room names bold */
   }
   
   .volume-control {
